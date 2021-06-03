@@ -20,7 +20,7 @@ public class DataManager : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
-        //Load();
+        Load();
     }
 
     public void SaveData()
@@ -38,22 +38,22 @@ public class DataManager : MonoBehaviour
 
         fileStream.Close();
     }
+
+    public void Load()
+    {
+        if (File.Exists(Application.persistentDataPath + "/Save.dat") == true)
+        {
+            FileStream file = File.Open(Application.persistentDataPath + "/Save.dat", FileMode.Open);
+
+            if (file != null && file.Length > 0)
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                SaveData saveData = (SaveData)binaryFormatter.Deserialize(file);
+                playerHP = saveData.playerHP;
+                UIManager.instance.PlayerHP();
+                currentScene = saveData.sceneName;
+                file.Close();
+            }
+        }
+    }
 }
-
-//public void Load()
-//{
-//    if(File.Exists(Application.persistentDataPath + "/Save.dat") == true)
-//    {
-//        FileStream file = File.Open(Application.persistentDataPath + "/Save.dat", FileMode.Open);
-
-//        if(file != null && file.Length > 0)
-//        {
-//            BinaryFormatter binaryFormatter = new BinaryFormatter();
-//            SaveData saveData = (SaveData)binaryFormatter.Deserialize(file);
-//            playerHP = saveData.playerHP;
-//            UIManager.instance.PlayerHP();
-//            currentScene = saveData.sceneName;
-//            file.Close();
-//        }
-//    }
-//}
